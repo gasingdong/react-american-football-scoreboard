@@ -1,5 +1,5 @@
 //TODO: STEP 1 - Import the useState hook.
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import "./App.css";
 import BottomRow from "./BottomRow";
 
@@ -11,6 +11,16 @@ function App() {
   const [homeScore, setHomeScore] = useState(0);
   const [awayScore, setAwayScore] = useState(0);
   const [quarter, setQuarter] = useState(1);
+
+  useEffect(() => {
+    let count = 0;
+    const timerContainer = document.querySelector('.timer');
+    const timer = setInterval(() => {
+      count = count + 38;
+      timerContainer.textContent = [Math.floor(count / 600), Math.floor((count % 600) / 60), ":", Math.floor((count % 60) / 10), count % 10].join('');
+    }, 1000);
+    return () => clearInterval(timer);
+  });
 
   const createTeams = (homeTeam, awayTeam) => {
     return {
@@ -38,7 +48,7 @@ function App() {
       <section className="scoreboard">
         <div className="topRow">
           <TeamScore team={homeTeam}/>
-          <div className="timer">00:03</div>
+          <div className="timer">00:00</div>
           <TeamScore team={awayTeam}/>
         </div>
         <BottomRow quarter={quarter}/>
