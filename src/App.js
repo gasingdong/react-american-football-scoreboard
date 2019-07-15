@@ -10,6 +10,7 @@ function App() {
   //TODO: STEP 2 - Establish your applictaion's state with some useState hooks.  You'll need one for the home score and another for the away score.
   const [homeScore, setHomeScore] = useState(0);
   const [awayScore, setAwayScore] = useState(0);
+  const [quarter, setQuarter] = useState(1);
 
   const createTeams = (homeTeam, awayTeam) => {
     return {
@@ -40,10 +41,16 @@ function App() {
           <div className="timer">00:03</div>
           <TeamScore team={awayTeam}/>
         </div>
-        <BottomRow />
+        <BottomRow quarter={quarter}/>
       </section>
       <section className="buttons">
         <TeamButtons team={homeTeam}/>
+        <div className="homeButtons">
+          <button className="homeButtons__touchdown" onClick={() => {
+            const newQuarter = quarter < 4 ? quarter + 1 : 1;
+            return setQuarter(newQuarter);
+          }}>Next Quarter</button>
+        </div>
         <TeamButtons team={awayTeam}/>
       </section>
     </div>
