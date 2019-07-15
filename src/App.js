@@ -24,26 +24,30 @@ function App() {
         <BottomRow />
       </section>
       <section className="buttons">
-        <div className="homeButtons">
-          {/* TODO STEP 4 - Now we need to attach our state setter functions to click listeners. */}
-          <button className="homeButtons__touchdown" onClick={() => setHomeScore(homeScore + touchdown)}>Home Touchdown</button>
-          <button className="homeButtons__fieldGoal" onClick={() => setHomeScore(homeScore + fieldGoal)}>Home Field Goal</button>
-        </div>
-        <div className="awayButtons">
-          <button className="awayButtons__touchdown" onClick={() => setAwayScore(awayScore + touchdown)}>Away Touchdown</button>
-          <button className="awayButtons__fieldGoal" onClick={() => setAwayScore(awayScore + fieldGoal)}>Away Field Goal</button>
-        </div>
+        <TeamButtons home={true} onTouchdown={() => setHomeScore(homeScore + touchdown)} onFieldGoal={() => setHomeScore(homeScore + fieldGoal)}/>
+        <TeamButtons onTouchdown={() => setAwayScore(awayScore + touchdown)} onFieldGoal={() => setAwayScore(awayScore + fieldGoal)}/>
       </section>
     </div>
   );
 }
 
-function TeamScore(prop) {
-  const prefix = prop.home ? "home" : "away";
+function TeamButtons(props) {
+  const prefix = props.home ? "homeButtons" : "awayButtons";
+  const label = props.home ? "Home" : "Away";
   return (
     <div className={prefix}>
-      <h2 className={prefix + "__name"}>{prop.teamName}</h2>
-      <div className={prefix + "__score"}>{prop.score}</div>
+      <button className={prefix + "__touchdown"} onClick={props.onTouchdown}>{label} Touchdown</button>
+      <button className={prefix + "__fieldGoal"} onClick={props.onFieldGoal}>{label} Field Goal</button>
+    </div>
+  );
+}
+
+function TeamScore(props) {
+  const prefix = props.home ? "home" : "away";
+  return (
+    <div className={prefix}>
+      <h2 className={prefix + "__name"}>{props.teamName}</h2>
+      <div className={prefix + "__score"}>{props.score}</div>
     </div>
   );
 }
