@@ -17,9 +17,9 @@ function App() {
     <div className="container">
       <section className="scoreboard">
         <div className="topRow">
-          <TeamScore home={true} teamName="Lions" score={homeScore}/>  
+          <TeamScore home={true} teamName={homeTeam} score={homeScore}/>  
           <div className="timer">00:03</div>
-          <TeamScore teamName="Tigers" score={awayScore}/>
+          <TeamScore teamName={awayTeam} score={awayScore}/>
         </div>
         <BottomRow />
       </section>
