@@ -16,7 +16,7 @@ function App() {
     let count = 0;
     const timerContainer = document.querySelector('.timer');
     const timer = setInterval(() => {
-      count = count + 38;
+      count = count + 1;
       timerContainer.textContent = [Math.floor(count / 600), Math.floor((count % 600) / 60), ":", Math.floor((count % 60) / 10), count % 10].join('');
     }, 1000);
     return () => clearInterval(timer);
