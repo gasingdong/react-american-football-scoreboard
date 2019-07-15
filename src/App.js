@@ -3,51 +3,76 @@ import React, {useState} from "react";
 import "./App.css";
 import BottomRow from "./BottomRow";
 
+const touchdown = 7;
+const fieldGoal = 3;
+
 function App() {
   //TODO: STEP 2 - Establish your applictaion's state with some useState hooks.  You'll need one for the home score and another for the away score.
   const [homeScore, setHomeScore] = useState(0);
   const [awayScore, setAwayScore] = useState(0);
-  const touchdown = 7;
-  const fieldGoal = 3;
 
-  const homeTeam = 'Lions';
-  const awayTeam = 'Tigers';
+  const createTeams = (homeTeam, awayTeam) => {
+    return {
+      home: {
+        name: homeTeam,
+        score: homeScore,
+        scoreSetter: setHomeScore,
+        isHome: true,
+      },
+      away: {
+        name: awayTeam,
+        score: awayScore,
+        scoreSetter: setAwayScore,
+        isHome: false,
+      },
+    }
+  }
+
+  const teams = createTeams('Lions', 'Tigers');
+  const homeTeam = teams["home"];
+  const awayTeam = teams["away"];
 
   return (
     <div className="container">
       <section className="scoreboard">
         <div className="topRow">
-          <TeamScore home={true} teamName={homeTeam} score={homeScore}/>  
+          <TeamScore team={homeTeam}/>
           <div className="timer">00:03</div>
-          <TeamScore teamName={awayTeam} score={awayScore}/>
+          <TeamScore team={awayTeam}/>
         </div>
         <BottomRow />
       </section>
       <section className="buttons">
-        <TeamButtons home={true} onTouchdown={() => setHomeScore(homeScore + touchdown)} onFieldGoal={() => setHomeScore(homeScore + fieldGoal)}/>
-        <TeamButtons onTouchdown={() => setAwayScore(awayScore + touchdown)} onFieldGoal={() => setAwayScore(awayScore + fieldGoal)}/>
+        <TeamButtons team={homeTeam}/>
+        <TeamButtons team={awayTeam}/>
       </section>
     </div>
   );
 }
 
 function TeamButtons(props) {
-  const prefix = props.home ? "homeButtons" : "awayButtons";
-  const label = props.home ? "Home" : "Away";
+  const team = props.team;
+  const createScoreHandler = (scoreSetter, score, points) => {
+    return () => scoreSetter(score + points);
+  };
+  const prefix = team.isHome ? "homeButtons" : "awayButtons";
+  const label = team.isHome ? "Home" : "Away";
+
   return (
     <div className={prefix}>
-      <button className={prefix + "__touchdown"} onClick={props.onTouchdown}>{label} Touchdown</button>
-      <button className={prefix + "__fieldGoal"} onClick={props.onFieldGoal}>{label} Field Goal</button>
+      <button className={prefix + "__touchdown"} onClick={createScoreHandler(team.scoreSetter, team.score, touchdown)}>{label} Touchdown</button>
+      <button className={prefix + "__fieldGoal"} onClick={createScoreHandler(team.scoreSetter, team.score, fieldGoal)}>{label} Field Goal</button>
     </div>
   );
 }
 
 function TeamScore(props) {
-  const prefix = props.home ? "home" : "away";
+  const team = props.team;
+  const prefix = team.isHome ? "home" : "away";
   return (
     <div className={prefix}>
-      <h2 className={prefix + "__name"}>{props.teamName}</h2>
-      <div className={prefix + "__score"}>{props.score}</div>
+      <h2 className={prefix + "__name"}>{team.name}</h2>
+      <div className={prefix + "__score"}>{team.score}</div>
     </div>
   );
 }
